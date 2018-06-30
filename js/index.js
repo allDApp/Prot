@@ -111,8 +111,14 @@ function addMy(index){
 		var callFunction = "adMy";
 		var callArgs = "[\"" + index + "\"]";
 		nebpay.call(to, value, callFunction, callArgs, {
-			listener: function(resp) {
-				console.log(JSON.stringify(resp.result));
+			listener: function Push(resp) {
+				console.log("response of push: " + JSON.stringify(resp))
+				var respString = JSON.stringify(resp);
+				if(respString.search("rejected by user") !== -1){
+					alert("关闭交易,取消")
+				}else if(respString.search("txhash") !== -1){
+					alert("上传Hash: " + resp.txhash+"请等待交易确认")
+				}
 			}
 		});
 };
@@ -138,11 +144,11 @@ function save(){
 		var name = $("#name").val();
 		var bal = $("#bals").val();
 		if (content == "") {
-			alert("请输入谜。");
+			alert("请输入资料。");
 			return;
 		}
 		if (name == "") {
-			alert("请输入。");
+			alert("请输入名称");
 			return;
 		}
 		if (bal == "") {
@@ -160,7 +166,7 @@ function save(){
 				console.log("response of push: " + JSON.stringify(resp))
 				var respString = JSON.stringify(resp);
 				if(respString.search("rejected by user") !== -1){
-					alert("关闭交易,取消上传谜题")
+					alert("关闭交易,取消上传")
 				}else if(respString.search("txhash") !== -1){
 					alert("上传Hash: " + resp.txhash+"请等待交易确认,如果上传失败请检查内容是否含有特殊字符")
 				}
